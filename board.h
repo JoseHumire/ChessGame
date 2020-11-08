@@ -5,7 +5,7 @@
 #include <QVector>
 #include "square.h"
 namespace Ui {
-class Board;
+    class Board;
 }
 
 class Board : public QWidget
