@@ -6,7 +6,7 @@
 #include "king.h"
 #include "rook.h"
 #include <QtGui>
-
+#include <QSize>
 Square::Square()
 {
 }
@@ -36,9 +36,8 @@ Square::Square(QBrush* brush, int i):
     else if ((i>=8 && i<=15) || (i>=48 && i<=55)){
         piece = std::make_unique<Pawn>(color, this);
     }
-
-    if (piece != nullptr)
-        piece->show();
+    if (piece != nullptr){
+        piece->show();}
 }
 
 void Square::paintEvent(QPaintEvent *)
@@ -51,5 +50,11 @@ void Square::paintEvent(QPaintEvent *)
     pen.setStyle(Qt::NoPen);
     painter.setPen(pen);
     painter.drawRect(0, 0, width, height);
+    QSize s(width, height);
+
+    if (piece != nullptr){
+        piece->setMaximumSize(s);
+        piece->setMinimumSize(s);
+    }
 }
 

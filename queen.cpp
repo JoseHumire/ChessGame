@@ -4,8 +4,9 @@ Queen::Queen(std::string _color, QWidget *parent) :
     Piece(_color, parent)
 {
     if (_color == "light")
-        icon.load("D:/UNSA/SEMESTRE6/TO/ChessGame/images/lightQueen.png");
+        icon.load("../ChessGame/images/lightQueen.png");
     else
-        icon.load("D:/UNSA/SEMESTRE6/TO/ChessGame/images/darkQueen.png");
+        icon.load("../ChessGame/images/darkQueen.png");
+    icon.scaled(parent->width(), parent->height());
     this->setPixmap(icon);
 }
