@@ -17,6 +17,7 @@ protected:
 public:
     Piece() = delete;
     explicit Piece(std::string _color, QWidget *parent = nullptr);
+    bool isWhite();
 };
 
 #endif // PIECE_H

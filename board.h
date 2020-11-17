@@ -15,10 +15,12 @@ class Board : public QWidget
 public:
     explicit Board(QWidget *parent = nullptr);
     ~Board();
+    static bool whiteTurn;
 
 private:
     Ui::Board *ui;
     QVector<Square*> squares;
+protected:
 };
 
 #endif // BOARD_H

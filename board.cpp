@@ -2,7 +2,7 @@
 #include "pawn.h"
 #include "ui_board.h"
 #include <QGridLayout>
-
+#include <QtWidgets>
 Board::Board(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Board)
@@ -23,7 +23,7 @@ Board::Board(QWidget *parent) :
         }else{
             brush = light;
         }
-        Square *sq = new Square(brush, i);
+        Square *sq = new Square(brush, i, this);
         squares.push_back(sq);
         layout->addWidget(sq, i/8, i%8);
     }
