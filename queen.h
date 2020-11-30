@@ -8,6 +8,7 @@ class Queen : public Piece
 public:
     Queen()= delete;
     explicit Queen(std::string _color, QWidget *parent = nullptr);
+    std::vector<QPoint> getMoves(std::unique_ptr<Piece>[8][8], QPoint);
 };
 
 #endif // QUEEN_H

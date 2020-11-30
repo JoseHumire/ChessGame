@@ -8,3 +8,8 @@ Bishop::Bishop(std::string _color, QWidget *parent) :
         icon.load("../ChessGame/images/darkBishop.png");
     this->setPixmap(icon);
 }
+
+std::vector<QPoint> Bishop::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint start){
+    std::vector<QPoint> moves;
+    return moves;
+}
