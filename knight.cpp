@@ -16,7 +16,7 @@ std::vector<QPoint> Knight::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint
     int Ymoves[8] = { 1, 2, 2, 1, -1, -2, -2, -1 };
     int row = start.rx();
     int col = start.ry();
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; ++i) {
        int x = row + Xmoves[i];
        int y = col + Ymoves[i];
        if (x>=0 && y>=0 && x<8 && y<8){

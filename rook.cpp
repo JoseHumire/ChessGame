@@ -16,7 +16,7 @@ std::vector<QPoint> Rook::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint s
     int col = start.ry();
     int Xmoves[8] = { 1, -1, 0, 0 };
     int Ymoves[8] = { 0, 0,  1, -1};
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
        for(int j=1; j<8; ++j){
            int x = row + Xmoves[i]*j;
            int y = col + Ymoves[i]*j;

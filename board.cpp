@@ -145,8 +145,8 @@ void Board::dropEvent(QDropEvent *event)
         if (event->source() == this) {
             QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
             QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-            int c = event->pos().rx()/(width()/8);
-            int r = event->pos().ry()/(height()/8);
+            int c = std::min(event->pos().rx()/(width()/8), 7);
+            int r = std::min(event->pos().ry()/(height()/8), 7);
             int r2 = beingDragged.rx();
             int c2 = beingDragged.ry();
             Square *sq = squares[r][c];
