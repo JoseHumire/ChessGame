@@ -116,8 +116,12 @@ void Board::mousePressEvent(QMouseEvent *event)
     mimeData->setData("application/x-dnditemdata",data);
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData);
+    int pieceHeight = this->height()/8;
+    int pieceWidth = this->width()/8;
+    pixmap = pixmap.scaled(pieceWidth, pieceHeight);
     drag->setPixmap(pixmap);
-    drag->setHotSpot(child->pos());
+    QPoint trueHotSpot = QPoint(child->pos().rx() + pieceWidth/2,child->pos().ry() + pieceHeight/2 );
+    drag->setHotSpot(trueHotSpot);
     qDebug()<<moves;
     for(QPoint p : moves){
         Square * current = squares[p.rx()][p.ry()];
