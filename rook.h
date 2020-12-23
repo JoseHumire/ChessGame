@@ -7,8 +7,8 @@ class Rook : public Piece
 {
 public:
     Rook() =delete;
-    explicit Rook(std::string _color, QWidget *parent = nullptr);
-    std::vector<QPoint> getMoves(std::shared_ptr<Piece>[8][8], QPoint);
+    explicit Rook(std::string _color, QPoint _position, QWidget *parent = nullptr);
+    void calcMoves(std::shared_ptr<Piece> pieces[8][8]);
 };
 
 #endif // ROOK_H

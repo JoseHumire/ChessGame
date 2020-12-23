@@ -1,8 +1,9 @@
 #include "rook.h"
 #include <QDebug>
-Rook::Rook(std::string _color, QWidget *parent) :
-    Piece(_color, parent)
+Rook::Rook(std::string _color, QPoint _position, QWidget *parent) :
+    Piece(_color, _position, parent)
 {
+    type = 'R';
     if (_color == "light")
         icon.load("../ChessGame/images/lightRook.png");
     else
@@ -10,10 +11,10 @@ Rook::Rook(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> Rook::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
+void Rook::calcMoves(std::shared_ptr<Piece> pieces[8][8]){
     std::vector<QPoint> moves;
-    int row = start.rx();
-    int col = start.ry();
+    int row = position.rx();
+    int col = position.ry();
     int Xmoves[8] = { 1, -1, 0, 0 };
     int Ymoves[8] = { 0, 0,  1, -1};
     for (int i = 0; i < 4; ++i) {
@@ -31,5 +32,5 @@ std::vector<QPoint> Rook::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint s
            }
        }
     }
-    return moves;
+    this->moves = moves;
 }

@@ -1,8 +1,9 @@
 #include "king.h"
-
-King::King(std::string _color, QWidget *parent) :
-    Piece(_color, parent)
+#include <qdebug.h>
+King::King(std::string _color, QPoint _position, QWidget *parent) :
+    Piece(_color, _position, parent)
 {
+    type = 'K';
     if (_color == "light")
         icon.load("../ChessGame/images/lightKing.png");
     else
@@ -10,10 +11,10 @@ King::King(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> King::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
+void King::calcMoves(std::shared_ptr<Piece> pieces[8][8]){
     std::vector<QPoint> moves;
-    int row = start.rx();
-    int col = start.ry();
+    int row = position.rx();
+    int col = position.ry();
     int Xmoves[8] = { 1, 1, -1, -1 , 1, -1, 0, 0 };
     int Ymoves[8] = { 1, -1,  1, -1, 0, 0,  1, -1};
     for (int i = 0; i < 8; ++i) {
@@ -29,7 +30,7 @@ std::vector<QPoint> King::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint s
         }
     }
     if(!this->hasMoved){
-        if(pieces[row][0]!=nullptr && pieces[row][col-2]==nullptr && pieces[row][col-1]==nullptr){
+        if(pieces[row][0]!=nullptr && pieces[row][col-3]==nullptr && pieces[row][col-2]==nullptr && pieces[row][col-1]==nullptr){
             if(!pieces[row][0]->getState()){
                 moves.push_back(QPoint(row, col-2));
             }
@@ -40,5 +41,31 @@ std::vector<QPoint> King::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint s
             }
         }
     }
-    return moves;
+    auto it = moves.begin();
+    while (it != moves.end())
+        {
+            if (wouldBeInCheck(pieces, *it)) {
+                it = moves.erase(it);
+            }
+            else {
+                ++it;
+            }
+    }
+    this->moves = moves;
+}
+
+bool King::wouldBeInCheck(std::shared_ptr<Piece> pieces[8][8], QPoint futurePos){
+    qDebug()<<futurePos;
+    for(int i = 0; i<8; ++i){
+        for(int j = 0; j<8; ++j){
+            if(pieces[i][j]!=nullptr){
+                if(this->isWhite()!=pieces[i][j]->isWhite()){
+                    if(pieces[i][j]->isControllingSquare(futurePos)){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }

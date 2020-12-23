@@ -12,8 +12,7 @@
 extern bool whiteTurn;
 QPoint beingDragged;
 std::shared_ptr<Piece> piece = nullptr;
-std::shared_ptr<Piece> whiteKing = nullptr;
-std::shared_ptr<Piece> darkKing = nullptr;
+std::shared_ptr<Piece> lastEaten = nullptr;
 std::vector<QPoint> moves;
 Board::Board(QWidget *parent) :
     QWidget(parent),
@@ -30,6 +29,7 @@ Board::Board(QWidget *parent) :
     int index;
     QString color;
     bool isLight;
+    QPoint position;
     for(int i=0; i<8; ++i){
         for(int j=0; j<8; ++j){
             if((i+j)%2==0){
@@ -39,6 +39,7 @@ Board::Board(QWidget *parent) :
                 color = Square::dark;
                 isLight=false;
             }
+            position = QPoint(i, j);
             Square *sq = new Square(color, isLight);
             squares[i].push_back(sq);
             layout->addWidget(sq, i, j);
@@ -48,22 +49,27 @@ Board::Board(QWidget *parent) :
                 color = "dark";
 
             if (index==0 || index ==7 || index==56 || index==63){
-                piece = std::make_shared<Rook>(color, sq);
+                piece = std::make_shared<Rook>(color, position, sq);
             }
             else if (index==1 || index==6 || index==57 || index==62){
-                piece = std::make_shared<Knight>(color, sq);
+                piece = std::make_shared<Knight>(color, position, sq);
             }
             else if (index==2 || index==5 || index==58 || index==61){
-                piece = std::make_shared<Bishop>(color, sq);
-            }
-            else if (index==3 || index==59){
-                piece = std::make_shared<Queen>(color, sq);
+                piece = std::make_shared<Bishop>(color, position, sq);
             }
             else if (index==4 || index==60){
-                piece = std::make_shared<King>(color, sq);
+                piece = std::make_shared<King>(color, position, sq);
+                if (index==60){
+                    whiteKing = piece;
+                }else{
+                    darkKing = piece;
+                }
+            }
+            else if (index==3 || index==59){
+                piece = std::make_shared<Queen>(color, position, sq);
             }
             else if ((index>=8 && index<=15) || (index>=48 && index<=55)){
-                piece = std::make_shared<Pawn>(color, sq);
+                piece = std::make_shared<Pawn>(color, position, sq);
             }
             pieces[i][j]=std::move(piece);
             if(piece!=nullptr){
@@ -71,6 +77,7 @@ Board::Board(QWidget *parent) :
             }
         }
     }
+    calcPiecesMoves();
     this->setLayout(layout);
 }
 
@@ -109,7 +116,7 @@ void Board::mousePressEvent(QMouseEvent *event)
         return;
     beingDragged = QPoint(row, col);
     qDebug()<<beingDragged;
-    moves = pieces[row][col]->getMoves(pieces, beingDragged);
+    moves = pieces[row][col]->getMoves();
     QPixmap pixmap = pieces[row][col]->pixmap(Qt::ReturnByValue);
     QByteArray data;
     QDataStream dataStream(&data, QIODevice::WriteOnly);
@@ -173,11 +180,7 @@ void Board::dropEvent(QDropEvent *event)
                 }
             }
             if(allowedMove){
-                pieces[r][c] = std::move(pieces[r2][c2]);
-                pieces[r][c]->setParent(sq);
-                pieces[r][c]->show();
-                pieces[r][c]->move();
-                whiteTurn = !whiteTurn;
+                move(pieces[r][c], QPoint(r2, c2), QPoint(r, c));
             }
             event->setDropAction(Qt::MoveAction);
             event->accept();
@@ -218,3 +221,54 @@ void Board::dragMoveEvent(QDragMoveEvent *event)
     }
 }
 
+void Board::move(std::shared_ptr<Piece> movingPiece, QPoint start, QPoint end){
+    int r = start.rx();
+    int c = start.ry();
+    int r2 = end.rx();
+    int c2 = end.ry();
+    Square *sq = squares[r2][c2];
+    pieces[r2][c2] = std::move(pieces[r][c]);
+    pieces[r2][c2]->move();
+    pieces[r2][c2]->setPosition(end);
+    if(pieces[r2][c2]->getType() == 'p'){
+        if(r2 == 0 &&  pieces[r2][c2]->isWhite()){
+            pieces[r2][c2] = std::make_shared<Queen>("light", end, sq);
+        }
+        if(r2 == 7 && !pieces[r2][c2]->isWhite()){
+            pieces[r2][c2] = std::make_shared<Queen>("dark", end, sq);
+        }
+    }
+    pieces[r2][c2]->setParent(sq);
+    pieces[r2][c2]->show();
+    whiteTurn = !whiteTurn;
+    calcPiecesMoves();
+}
+
+void Board::fakeMove(std::shared_ptr<Piece> movingPiece, QPoint start, QPoint end){
+    int r = start.rx();
+    int c = start.ry();
+    int r2 = end.rx();
+    int c2 = end.ry();
+    Square *sq = squares[r2][c2];
+    pieces[r2][c2] = std::move(pieces[r][c]);
+    pieces[r2][c2]->setParent(sq);
+    pieces[r2][c2]->show();
+    pieces[r2][c2]->move();
+    pieces[r2][c2]->setPosition(end);
+    whiteTurn = !whiteTurn;
+}
+
+void Board::calcPiecesMoves(){
+    for(int i = 0; i<8; ++i){
+        for(int j = 0; j<8; ++j){
+            if(pieces[i][j]!=nullptr){
+                pieces[i][j]->calcMoves(pieces);
+                pieces[i][j]->calcControlledSquares(pieces);
+            }
+        }
+    }
+    whiteKing->calcMoves(pieces);
+    whiteKing->calcControlledSquares(pieces);
+    darkKing->calcMoves(pieces);
+    darkKing->calcControlledSquares(pieces);
+}

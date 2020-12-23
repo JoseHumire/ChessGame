@@ -1,7 +1,7 @@
 #include "pawn.h"
-
-Pawn::Pawn(std::string _color, QWidget *parent) :
-    Piece(_color, parent)
+#include <QDebug>
+Pawn::Pawn(std::string _color, QPoint _position, QWidget *parent) :
+    Piece(_color, _position, parent)
 {
     if (_color == "light")
         icon.load("../ChessGame/images/lightPawn.png");
@@ -10,10 +10,10 @@ Pawn::Pawn(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> Pawn::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
+void Pawn::calcMoves(std::shared_ptr<Piece> pieces[8][8]){
     std::vector<QPoint> moves;
-    int r = start.rx();
-    int c = start.ry();
+    int r = position.rx();
+    int c = position.ry();
     int dir = (color == "light") ? -1:1;
     if(pieces[r+dir*1][c] == nullptr){
         moves.push_back(QPoint(r+dir*1, c));
@@ -37,13 +37,13 @@ std::vector<QPoint> Pawn::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint s
             moves.push_back(QPoint(r+dir*2, c));
         }
     }
-    return moves;
+    this->moves = moves;
 }
 
-std::vector<QPoint> Pawn::getControlledSquares(std::shared_ptr<Piece> pieces[8][8], QPoint start){
+void Pawn::calcControlledSquares(std::shared_ptr<Piece> pieces[8][8]){
     std::vector<QPoint> moves;
-    int r = start.rx();
-    int c = start.ry();
+    int r = position.rx();
+    int c = position.ry();
     int dir = (color == "light") ? -1:1;
     if(c-1>=0){
         if(pieces[r+dir*1][c-1]!=nullptr){
@@ -55,5 +55,5 @@ std::vector<QPoint> Pawn::getControlledSquares(std::shared_ptr<Piece> pieces[8][
             moves.push_back(QPoint(r+dir*1, c+1));
         }
     }
-    return moves;
+    this->controlledSquares = moves;
 }

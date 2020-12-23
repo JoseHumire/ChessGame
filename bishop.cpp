@@ -1,7 +1,8 @@
 #include "bishop.h"
-Bishop::Bishop(std::string _color, QWidget *parent) :
-    Piece(_color, parent)
+Bishop::Bishop(std::string _color, QPoint _position, QWidget *parent) :
+    Piece(_color, _position, parent)
 {
+    type = 'B';
     if (_color == "light")
         icon.load("../ChessGame/images/lightBishop.png");
     else
@@ -9,10 +10,10 @@ Bishop::Bishop(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> Bishop::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
+void Bishop::calcMoves(std::shared_ptr<Piece> pieces[8][8]){
     std::vector<QPoint> moves;
-    int row = start.rx();
-    int col = start.ry();
+    int row = position.rx();
+    int col = position.ry();
     int Xmoves[8] = { 1, 1, -1, -1 };
     int Ymoves[8] = { 1, -1,  1, -1};
     for (int i = 0; i < 4; ++i) {
@@ -30,5 +31,5 @@ std::vector<QPoint> Bishop::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint
            }
        }
     }
-    return moves;
+    this->moves = moves;
 }

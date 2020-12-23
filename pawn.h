@@ -7,9 +7,9 @@ class Pawn : public Piece
 {
 public:
     Pawn() = delete;
-    explicit Pawn(std::string _color, QWidget *parent = nullptr);
-    std::vector<QPoint> getMoves(std::shared_ptr<Piece>[8][8], QPoint) override;
-    std::vector<QPoint> getControlledSquares(std::shared_ptr<Piece>[8][8], QPoint) override;
+    explicit Pawn(std::string _color, QPoint _position, QWidget *parent = nullptr);
+    void calcMoves(std::shared_ptr<Piece> pieces[8][8]) override;
+    void calcControlledSquares(std::shared_ptr<Piece> pieces[8][8]) override;
 };
 
 #endif // PAWN_H

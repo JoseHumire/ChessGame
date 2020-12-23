@@ -4,9 +4,10 @@ Piece::Piece()
 {
 }
 
-Piece::Piece(std::string _color, QWidget *parent) :
+Piece::Piece(std::string _color, QPoint _position, QWidget *parent) :
     QLabel(parent),
-    color{_color}
+    color{_color},
+    position{_position}
 {
     this->setScaledContents(true);
 }
