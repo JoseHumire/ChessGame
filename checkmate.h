@@ -14,9 +14,11 @@ class CheckMate : public QDialog
 public:
     explicit CheckMate(QWidget *parent = nullptr);
     ~CheckMate();
+    void setWinner(bool);
 
 private:
     Ui::CheckMate *ui;
+    bool whiteWins = false;
 };
 
 #endif // CHECKMATE_H

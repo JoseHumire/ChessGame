@@ -341,6 +341,7 @@ void Board::calcPiecesMoves(){
         }
     }
     if(checkMate){
+        cWindow.setWinner(!whiteTurn);
         cWindow.exec();
     }
 }
