@@ -9,7 +9,7 @@ Bishop::Bishop(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> Bishop::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint start){
+std::vector<QPoint> Bishop::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
     std::vector<QPoint> moves;
     int row = start.rx();
     int col = start.ry();

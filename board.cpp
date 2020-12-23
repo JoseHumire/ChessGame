@@ -11,7 +11,9 @@
 #include "rook.h"
 extern bool whiteTurn;
 QPoint beingDragged;
-std::unique_ptr<Piece> piece = nullptr;
+std::shared_ptr<Piece> piece = nullptr;
+std::shared_ptr<Piece> whiteKing = nullptr;
+std::shared_ptr<Piece> darkKing = nullptr;
 std::vector<QPoint> moves;
 Board::Board(QWidget *parent) :
     QWidget(parent),
@@ -46,22 +48,22 @@ Board::Board(QWidget *parent) :
                 color = "dark";
 
             if (index==0 || index ==7 || index==56 || index==63){
-                piece = std::make_unique<Rook>(color, sq);
+                piece = std::make_shared<Rook>(color, sq);
             }
             else if (index==1 || index==6 || index==57 || index==62){
-                piece = std::make_unique<Knight>(color, sq);
+                piece = std::make_shared<Knight>(color, sq);
             }
             else if (index==2 || index==5 || index==58 || index==61){
-                piece = std::make_unique<Bishop>(color, sq);
+                piece = std::make_shared<Bishop>(color, sq);
             }
             else if (index==3 || index==59){
-                piece = std::make_unique<Queen>(color, sq);
+                piece = std::make_shared<Queen>(color, sq);
             }
             else if (index==4 || index==60){
-                piece = std::make_unique<King>(color, sq);
+                piece = std::make_shared<King>(color, sq);
             }
             else if ((index>=8 && index<=15) || (index>=48 && index<=55)){
-                piece = std::make_unique<Pawn>(color, sq);
+                piece = std::make_shared<Pawn>(color, sq);
             }
             pieces[i][j]=std::move(piece);
             if(piece!=nullptr){

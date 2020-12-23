@@ -10,7 +10,7 @@ Pawn::Pawn(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> Pawn::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint start){
+std::vector<QPoint> Pawn::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
     std::vector<QPoint> moves;
     int r = start.rx();
     int c = start.ry();
@@ -35,6 +35,24 @@ std::vector<QPoint> Pawn::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint s
     if(!hasMoved){
         if(pieces[r+dir*2][c] == nullptr){
             moves.push_back(QPoint(r+dir*2, c));
+        }
+    }
+    return moves;
+}
+
+std::vector<QPoint> Pawn::getControlledSquares(std::shared_ptr<Piece> pieces[8][8], QPoint start){
+    std::vector<QPoint> moves;
+    int r = start.rx();
+    int c = start.ry();
+    int dir = (color == "light") ? -1:1;
+    if(c-1>=0){
+        if(pieces[r+dir*1][c-1]!=nullptr){
+            moves.push_back(QPoint(r+dir*1, c-1));
+        }
+    }
+    if(c+1<8){
+        if(pieces[r+dir*1][c+1]!=nullptr){
+            moves.push_back(QPoint(r+dir*1, c+1));
         }
     }
     return moves;

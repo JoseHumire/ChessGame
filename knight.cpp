@@ -10,7 +10,7 @@ Knight::Knight(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> Knight::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint start){
+std::vector<QPoint> Knight::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
     std::vector<QPoint> moves;
     int Xmoves[8] = { 2, 1, -1, -2, -2, -1, 1, 2 };
     int Ymoves[8] = { 1, 2, 2, 1, -1, -2, -2, -1 };

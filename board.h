@@ -20,7 +20,7 @@ public:
 private:
     Ui::Board *ui;
     QVector<QVector<Square*>> squares{8};
-    std::unique_ptr<Piece> pieces[8][8];
+    std::shared_ptr<Piece> pieces[8][8];
 protected:
     void paintEvent(QPaintEvent *) override;
     void dragEnterEvent(QDragEnterEvent *event) override;

@@ -10,7 +10,7 @@ King::King(std::string _color, QWidget *parent) :
     this->setPixmap(icon);
 }
 
-std::vector<QPoint> King::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint start){
+std::vector<QPoint> King::getMoves(std::shared_ptr<Piece> pieces[8][8], QPoint start){
     std::vector<QPoint> moves;
     int row = start.rx();
     int col = start.ry();
@@ -26,6 +26,18 @@ std::vector<QPoint> King::getMoves(std::unique_ptr<Piece> pieces[8][8], QPoint s
                 }
             }
             moves.push_back(QPoint(x, y));
+        }
+    }
+    if(!this->hasMoved){
+        if(pieces[row][0]!=nullptr && pieces[row][col-2]==nullptr && pieces[row][col-1]==nullptr){
+            if(!pieces[row][0]->getState()){
+                moves.push_back(QPoint(row, col-2));
+            }
+        }
+        if(pieces[row][7]!=nullptr && pieces[row][col+2]==nullptr && pieces[row][col+1]==nullptr){
+            if(!pieces[row][7]->getState()){
+                moves.push_back(QPoint(row, col+2));
+            }
         }
     }
     return moves;
