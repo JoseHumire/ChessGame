@@ -21,7 +21,6 @@ void MainWindow::changeTurn(){
     }else{
         ui->turn1->setText("-");
         ui->turn2->setText("Turno Negras");
-
     }
 }
 
