@@ -53,17 +53,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget">
-            <row>
-             <property name="text">
-              <string>1</string>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>White</string>
-             </property>
-            </column>
+           <widget class="QLabel" name="turn1">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Turno Blancas</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -86,17 +84,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_2">
-            <row>
-             <property name="text">
-              <string>1</string>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>Black</string>
-             </property>
-            </column>
+           <widget class="QLabel" name="turn2">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
            </widget>
           </item>
          </layout>

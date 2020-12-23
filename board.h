@@ -5,6 +5,8 @@
 #include <QVector>
 #include "square.h"
 #include "piece.h"
+#include "promotionwindow.h"
+#include "checkmate.h"
 namespace Ui {
     class Board;
 }
@@ -23,6 +25,8 @@ private:
     std::shared_ptr<Piece> darkKing;
     QVector<QVector<Square*>> squares{8};
     std::shared_ptr<Piece> pieces[8][8];
+    PromotionWindow pWindow;
+    CheckMate cWindow;
 protected:
     void paintEvent(QPaintEvent *) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -33,6 +37,8 @@ protected:
     void fakeMove(std::shared_ptr<Piece>, QPoint, QPoint);
     void calcPiecesMoves();
     void checkValidMoves();
+signals:
+    void turnChanged();
 };
 
 #endif // BOARD_H

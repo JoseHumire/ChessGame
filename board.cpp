@@ -231,17 +231,35 @@ void Board::move(std::shared_ptr<Piece> movingPiece, QPoint start, QPoint end){
     pieces[r2][c2]->move();
     pieces[r2][c2]->setPosition(end);
     if(pieces[r2][c2]->getType() == 'p'){
-        if(r2 == 0 &&  pieces[r2][c2]->isWhite()){
-            pieces[r2][c2] = std::make_shared<Queen>("light", end, sq);
-        }
-        if(r2 == 7 && !pieces[r2][c2]->isWhite()){
-            pieces[r2][c2] = std::make_shared<Queen>("dark", end, sq);
+        if(r2 == 0 || r2 == 7){
+            std::string color = "light";
+            if(!pieces[r2][c2]->isWhite()){
+                color = "dark";
+            }
+            pWindow.setColor(color);
+            pWindow.exec();
+            char newPiece = pWindow.getPiece();
+            switch(newPiece){
+                case 'Q':
+                    pieces[r2][c2] = std::make_shared<Queen>(color, end, sq);
+                    break;
+                case 'R':
+                    pieces[r2][c2] = std::make_shared<Rook>(color, end, sq);
+                    break;
+                case 'B':
+                    pieces[r2][c2] = std::make_shared<Bishop>(color, end, sq);
+                    break;
+                case 'K':
+                    pieces[r2][c2] = std::make_shared<Knight>(color, end, sq);
+                    break;
+            }
         }
     }
     pieces[r2][c2]->setParent(sq);
     pieces[r2][c2]->show();
     whiteTurn = !whiteTurn;
     calcPiecesMoves();
+    emit turnChanged();
 }
 
 void Board::checkValidMoves(){
@@ -303,6 +321,6 @@ void Board::calcPiecesMoves(){
         }
     }
     if(checkMate){
-        qDebug()<<"Jaque Mate";
+        cWindow.exec();
     }
 }
