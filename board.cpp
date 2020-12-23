@@ -255,6 +255,26 @@ void Board::move(std::shared_ptr<Piece> movingPiece, QPoint start, QPoint end){
             }
         }
     }
+
+    if(pieces[r2][c2]->getType() == 'K'){
+        if(c2-c==2){
+            QPoint rp = QPoint(r2, 7);
+            pieces[r2][5] = std::move(pieces[r2][7]);
+            pieces[r2][5]->move();
+            pieces[r2][5]->setPosition(QPoint(r2, 5));
+            pieces[r2][5]->setParent(squares[r2][5]);
+            pieces[r2][5]->show();
+        }
+        if(c2-c==-2){
+            QPoint rp = QPoint(r2, 0);
+            pieces[r2][3] = std::move(pieces[r2][0]);
+            pieces[r2][3]->move();
+            pieces[r2][3]->setPosition(QPoint(r2, 3));
+            pieces[r2][3]->setParent(squares[r2][3]);
+            pieces[r2][3]->show();
+        }
+    }
+
     pieces[r2][c2]->setParent(sq);
     pieces[r2][c2]->show();
     whiteTurn = !whiteTurn;
