@@ -244,6 +244,19 @@ void Board::move(std::shared_ptr<Piece> movingPiece, QPoint start, QPoint end){
     calcPiecesMoves();
 }
 
+void Board::checkValidMoves(){
+    std::shared_ptr<Piece> king = whiteKing;
+    if(!whiteTurn){
+        king = darkKing;
+    }
+    for(int i = 0; i<8; ++i){
+        for(int j = 0; j<8; ++j){
+            if(pieces[i][j]!=nullptr){
+            }
+        }
+    }
+}
+
 void Board::fakeMove(std::shared_ptr<Piece> movingPiece, QPoint start, QPoint end){
     int r = start.rx();
     int c = start.ry();
@@ -252,23 +265,44 @@ void Board::fakeMove(std::shared_ptr<Piece> movingPiece, QPoint start, QPoint en
     Square *sq = squares[r2][c2];
     pieces[r2][c2] = std::move(pieces[r][c]);
     pieces[r2][c2]->setParent(sq);
-    pieces[r2][c2]->show();
     pieces[r2][c2]->move();
     pieces[r2][c2]->setPosition(end);
-    whiteTurn = !whiteTurn;
 }
 
 void Board::calcPiecesMoves(){
+    auto wPos = whiteKing->getPosition();
+    auto dPos = darkKing->getPosition();
+    QPoint pos;
     for(int i = 0; i<8; ++i){
         for(int j = 0; j<8; ++j){
             if(pieces[i][j]!=nullptr){
-                pieces[i][j]->calcMoves(pieces);
-                pieces[i][j]->calcControlledSquares(pieces);
+                if(pieces[i][j]->isWhite()){
+                    pos = wPos;
+                }else{
+                    pos = dPos;
+                }
+                pieces[i][j]->calcMoves(pieces, pos);
+                pieces[i][j]->calcControlledSquares(pieces, pos);
             }
         }
     }
-    whiteKing->calcMoves(pieces);
-    whiteKing->calcControlledSquares(pieces);
-    darkKing->calcMoves(pieces);
-    darkKing->calcControlledSquares(pieces);
+    whiteKing->calcMoves(pieces, wPos);
+    whiteKing->calcControlledSquares(pieces, wPos);
+    darkKing->calcMoves(pieces, dPos);
+    darkKing->calcControlledSquares(pieces, dPos);
+    bool checkMate = true;
+    for(int i = 0; i<8; ++i){
+        for(int j = 0; j<8; ++j){
+            if(pieces[i][j]!=nullptr){
+                if(pieces[i][j]->isWhite() == whiteTurn){
+                    if(!pieces[i][j]->getMoves().empty()){
+                        checkMate = false;
+                    }
+                }
+            }
+        }
+    }
+    if(checkMate){
+        qDebug()<<"Jaque Mate";
+    }
 }

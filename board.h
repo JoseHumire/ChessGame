@@ -32,6 +32,7 @@ protected:
     void move(std::shared_ptr<Piece>, QPoint, QPoint);
     void fakeMove(std::shared_ptr<Piece>, QPoint, QPoint);
     void calcPiecesMoves();
+    void checkValidMoves();
 };
 
 #endif // BOARD_H
